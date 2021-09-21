@@ -1,0 +1,8 @@
+[package]
+name = "zredis"
+version = "0.1.0"
+edition = "2018"
+
+authors = ["ZZP <pengzezhi5266@gmail.com>"]
+
+[dependencies]
