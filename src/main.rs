@@ -1,10 +1,8 @@
-use self::net::Server;
-
 pub mod net;
+pub use crate::net::new_server;
 
 fn main() {
-  println!("redis start");
   let port: u16 = 6379;
-  let mut server = Server::new("127.0.0.1", &port);
+  let server = new_server("127.0.0.1", &port);
   server.start();
 }
