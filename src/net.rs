@@ -2,12 +2,12 @@ use std::net::{TcpListener, TcpStream};
 
 pub struct Server {
   pub ip: String,
-  pub port: i32,
+  pub port: u16,
   pub clients: Vec<TcpStream>,
 }
 
 impl Server {
-  pub fn new(ip: &str, port: &i32) -> Server {
+  pub fn new(ip: &str, port: &u16) -> Server {
     return Server {
       ip: ip.to_string(),
       port: *port,
@@ -33,6 +33,6 @@ impl Server {
   }
 }
 
-pub fn new_server(ip: &str, port: &i32) -> Server {
+pub fn new_server(ip: &str, port: &u16) -> Server {
   return Server::new(ip, port);
 }
