@@ -3,6 +3,8 @@ use std::net::{TcpListener, TcpStream};
 use std::str::from_utf8;
 use std::thread;
 
+use super::protocol::parse;
+
 pub struct Client {
   pub stream: TcpStream,
 }
@@ -31,10 +33,10 @@ impl Client {
 
 impl Server {
   pub fn new(ip: &str, port: &u16) -> Server {
-    return Server {
+    Server {
       ip: ip.to_string(),
       port: *port,
-    };
+    }
   }
 
   pub fn handle_client(&self, stream: TcpStream) {
@@ -60,7 +62,7 @@ impl Server {
 }
 
 pub fn new_server(ip: &str, port: &u16) -> Server {
-  return Server::new(ip, port);
+  Server::new(ip, port)
 }
 
 #[cfg(test)]
