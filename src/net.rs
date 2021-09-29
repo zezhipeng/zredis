@@ -1,9 +1,9 @@
+use super::protocol::parse;
 use std::io::Read;
 use std::net::{TcpListener, TcpStream};
-use std::str::from_utf8;
 use std::thread;
 
-use super::protocol::parse;
+// use super::protocol::parse;
 
 pub struct Client {
   pub stream: TcpStream,
@@ -22,11 +22,24 @@ impl Client {
     let mut buffer = [0u8; 512];
 
     loop {
-      let usize = self.stream.read(&mut buffer).unwrap();
-      if usize == 0 {
+      let result = self.stream.read(&mut buffer);
+      if result.is_err() {
         break;
       }
-      println!("{} {}", from_utf8(&buffer).unwrap(), usize);
+      let len = result.unwrap();
+      println!("gonna print {}", len);
+      if len == 0 {
+        break;
+      }
+      let try_parser = parse(&buffer, len);
+      if try_parser.is_err() {
+        break;
+      }
+      let parser = try_parser.unwrap();
+      println!("{}", parser.argc);
+      for i in 0..parser.argc {
+        println!("{}", parser.get_str(i).unwrap())
+      }
     }
   }
 }
@@ -63,18 +76,4 @@ impl Server {
 
 pub fn new_server(ip: &str, port: &u16) -> Server {
   Server::new(ip, port)
-}
-
-#[cfg(test)]
-mod tests {
-  use std::net::TcpStream;
-
-  #[test]
-  fn it_works() {
-    let mut stream = TcpStream::connect("127.0.0.1:6379");
-
-    // stream.write(&[1]);
-    // stream.read(&mut [0; 128]);
-    // Ok(());
-  }
 }
